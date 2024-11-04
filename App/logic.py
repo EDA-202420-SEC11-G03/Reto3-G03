@@ -149,12 +149,19 @@ def get_data(catalog, id):
     pass
 
 
-def req_1(catalog):
+def req_1(catalog, p_start, p_end):
     """
     Retorna el resultado del requerimiento 1
     """
-    # TODO: Modificar el requerimiento 1
-    pass
+    f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #formato de las fechas parametro
+    f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #formato de las fechas parametro
+    n_accidentes = 0 #contador de número de accidentes que cumplen
+    
+    for accidente in catalog["treq1"]:
+        print(accidente)
+        
+    return
+    
 
 
 def req_2(catalog):
