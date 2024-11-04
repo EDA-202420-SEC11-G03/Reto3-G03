@@ -21,6 +21,8 @@ def load_data(catalog, filename):
     """
     # TODO: Realizar la carga de datos
     accidentes = csv.DictReader(open(filename, encoding='utf-8'))
+    listadeaccientes= ar.new_list()
+
     for accidente in accidentes:
         accidente["duracion en horas"]= 0
         if accidente["Start_Time"] is None:
@@ -53,6 +55,7 @@ def load_data(catalog, filename):
             accidente["Description"]="Desconocido"
         if accidente["Visibility(mi)"]=="":
             accidente["Visibility(mi)"]=0
+        ar.add_last(listadeaccientes, accidente)
         
         keytreq1= accidente["Start_Time"]
         if bst.contains(catalog["treq1"], keytreq1)== False:
@@ -138,7 +141,40 @@ def load_data(catalog, filename):
                 lista  = ar.add_last(lista, accidente)
                 bst.put(bst.get(bst.get(catalog["treq6"], keytreq6), keytreq6sub), keytreq6subsub, lista)
                 
-    return catalog 
+                
+                
+        keytreq7= accidente["Start_Lat"]
+        if bst.contains(catalog["treq7"], keytreq7)== False:
+            bst.put(catalog["treq7"], keytreq7, bst.new_map())
+        keytreq7sub= accidente["Start_Lng"]
+        if bst.contains(bst.get(catalog["treq7"], keytreq7), keytreq7sub)== False:
+            bst.put(bst.get(catalog["treq7"], keytreq7), keytreq7sub, bst.new_map())
+        keytreq7subsub= accidente["End_Lat"]
+        if bst.contains(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub)== False:
+            bst.put(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub, bst.new_map())
+        keytreq7subsubsub= accidente["End_Lng"] 
+        if bst.contains(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub) == False:
+            lista = ar.new_list()
+            lista = ar.add_last(lista, accidente)
+            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)
+        else:
+            lista = bst.get(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub)
+            lista = ar.add_last(lista, accidente)
+            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)           
+    primeros= listadeaccientes["elements"][:5]
+    ultimos= listadeaccientes["elements"][-5:]
+    info= ar.new_list()
+    for accidente in primeros:
+        nuevodic={"ID": accidente["ID"], "Fecha y hora de inicio": accidente["Start_Time"],
+                  "Ciudad": accidente["City"], "Estado": accidente["State"], "Descripcion": accidente["Description"],
+                  "Tiempo de duracion": accidente["duracion en horas"]}
+        ar.add_last(info, nuevodic)
+    for accidente in ultimos:
+        nuevodic={"ID": accidente["ID"], "Fecha y hora de inicio": accidente["Start_Time"],
+                  "Ciudad": accidente["City"], "Estado": accidente["State"], "Descripcion": accidente["Description"],
+                  "Tiempo de duracion": accidente["duracion en horas"]}
+        ar.add_last(info, nuevodic)     
+    return (listadeaccientes["size"], info["elements"])
 # Funciones de consulta sobre el catálogo
 
 def get_data(catalog, id):
