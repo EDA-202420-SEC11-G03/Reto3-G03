@@ -277,7 +277,19 @@ def req_5(catalog, fechaini, fechafin, condiciones):
             if dic[condicion]>dic["predominante"]["cantidad"]:
                 dic["predominante"]["cantidad"]= dic[condicion]    
                 dic["predominante"]["condicion"]= condicion
+    lista= ar.insertion_sort(lista, sort_crt)
     return lista
+def sort_crt(elemento1, elemento2):
+    if elemento2["numero"]<elemento1["numero"]:
+        return True           
+    elif elemento1["numero"]==elemento2["numero"]:
+        if elemento2["promedio"]<elemento1["promedio"]:
+            return True
+    else:
+        return False
+                 
+        
+    
 def req_6(catalog):
     """
     Retorna el resultado del requerimiento 6
