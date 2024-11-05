@@ -73,9 +73,11 @@ def print_req_5(control):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
-
-
+    x= input(print("introduzca fecha inical: "))
+    y= input(print("introduzca fecha final: "))
+    z= input(print("introduzca codiciones: "))
+    rta= lg.req_5(control, x, y, z)
+    print(rta)
 def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola

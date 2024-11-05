@@ -217,13 +217,67 @@ def req_4(catalog):
     pass
 
 
-def req_5(catalog):
+def req_5(catalog, fechaini, fechafin, condiciones):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
-
+    condiciones = condiciones.split(",")
+    fechaini = datetime.strptime(fechaini, '%Y-%m-%d')
+    fechafin = datetime.strptime(fechafin, '%Y-%m-%d')
+    fechafin = fechafin.date()
+    fechaini = fechaini.date()
+    trees= bst.values(catalog["treq5"], fechaini, fechafin)
+    dicmañana={"franja": "mañana", "numero":0, "promedio":0}
+    dictarde={"franja": "tarde","numero":0, "promedio":0}
+    dicnoche={"franja": "noche","numero":0, "promedio":0}
+    dicmadrugada={"franja": "madrugada","numero":0, "promedio":0}
+    for condicion in condiciones:
+        dicmañana[condicion]=0
+        dictarde[condicion]=0
+        dicnoche[condicion]=0
+        dicmadrugada[condicion]=0
+    for tree in trees["elements"]:
+    
+        weather= bst.key_set(tree)
+        weather= weather["elements"]
+        for clima in weather:
+            for condicion in condiciones:
+                if condicion in clima:
+                    accidentes=bst.get(tree, clima)
+                    for accidente in accidentes["elements"]:
+                        horaaccidente= accidente["Start_Time"]
+                        horaaccidente= horaaccidente.hour
+                        if horaaccidente>=0 and horaaccidente<6:
+                            dicmadrugada[condicion]+=1
+                            dicmadrugada["numero"]+=1
+                            dicmadrugada["promedio"]+= float(accidente["Severity"])
+                        elif horaaccidente>=6 and horaaccidente<12:
+                            dicmañana[condicion]+=1
+                            dicmañana["numero"]+=1
+                            dicmañana["promedio"]+= float(accidente["Severity"])
+                        elif horaaccidente>=12 and horaaccidente<18:
+                            dictarde[condicion]+=1
+                            dictarde["numero"]+=1
+                            dictarde["promedio"]+= float(accidente["Severity"])
+                        elif horaaccidente>=18:
+                            dicnoche[condicion]+=1
+                            dicnoche["numero"]+=1
+                            dicnoche["promedio"]+= float(accidente["Severity"])
+    lista= ar.new_list()
+    ar.add_last(lista, dicmadrugada)
+    ar.add_last(lista, dicmañana)
+    ar.add_last(lista, dictarde)
+    ar.add_last(lista, dicnoche)
+    for dic in lista["elements"]:
+        if dic["numero"]!=0:
+            dic["promedio"]= dic["promedio"]/ dic["numero"]
+        dic["predominante"]= {"condicion": "", "cantidad": 0}
+        for condicion in condiciones:
+            if dic[condicion]>dic["predominante"]["cantidad"]:
+                dic["predominante"]["cantidad"]= dic[condicion]    
+                dic["predominante"]["condicion"]= condicion
+    return lista
 def req_6(catalog):
     """
     Retorna el resultado del requerimiento 6
