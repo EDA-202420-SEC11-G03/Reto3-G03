@@ -8,7 +8,6 @@ def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
-    #TODO: Llama a las funciónes de creación de las estructuras de datos
     catalog= {"treq1": bst.new_map(), "treq2": bst.new_map(), "treq3": bst.new_map(), "treq4": bst.new_map(),
               "treq5": bst.new_map(), "treq6": bst.new_map(), "treq7": bst.new_map()}
     return catalog
@@ -153,14 +152,35 @@ def req_1(catalog, p_start, p_end):
     """
     Retorna el resultado del requerimiento 1
     """
-    f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #formato de las fechas parametro
-    f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #formato de las fechas parametro
-    n_accidentes = 0 #contador de número de accidentes que cumplen
+    f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
+    f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
+    n_cumplen = 0
+    lista_accidentes = ar.new_list()
     
-    for accidente in catalog["treq1"]:
-        print(accidente)
+    def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
+        nonlocal n_cumplen, lista_accidentes #elimina el error de referenciación
         
-    return
+        if nodo is None:
+            return    
+        fecha_accidente = nodo["key"] #Llaves son las fechas, asignadas desde el load_data
+        accidentes = nodo["value"]
+        print("ACCIDENTES: ")
+        print(accidentes)      
+        ar.add_last(lista_accidentes, accidentes) 
+         
+        if f_inicial <= fecha_accidente <= f_final: #filtra el intervalo de las fechas parámetro     
+            n_cumplen += len(accidentes)           
+        if fecha_accidente > f_inicial:
+            filtro_intervalo(nodo["left"]) #evalúa por qué dirección del arbol debe continuar      
+        if fecha_accidente < f_final:
+            filtro_intervalo(nodo["right"]) #evalúa por qué dirección del arbol debe continuar
+    filtro_intervalo(catalog["treq1"]["root"])
+    
+    return n_cumplen, lista_accidentes
+
+            
+        
+    
     
 
 

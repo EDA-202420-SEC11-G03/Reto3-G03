@@ -40,8 +40,26 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    r = []
+    x=input(print("Introduzca el inicio de la fecha a filtrar: "))
+    y=input(print("Introduzca el final de la fecha a filtrar: "))
+    total, accidentes = lg.req_1(control, x,y)
+
+    for accidente in accidentes["elements"]:
+        for i in accidente["elements"]:
+            if i["End_Time"] == "Desconocido" or i["Start_Time"] == "Desconocido":
+                duracion = "Desconocido"
+            else:
+                duracion = i["End_Time"] - i["Start_Time"]
+            info_accidente = {
+                        "ID": i["ID"],
+                        "Fecha y Hora de Inicio": i["Start_Time"],
+                        "Ciudad": i.get("City", "Desconocido"),
+                        "Estado": i.get("State", "Desconocido"),
+                        "Duración en Horas": duracion
+                    }
+            r.append(info_accidente)
+    print(r)
 
 
 def print_req_2(control):
