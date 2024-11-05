@@ -274,3 +274,32 @@ def rank_node(root, key):
         if key > bn.get_key(root):
             return 1 + bn.get_size(root["left"]) + rank_node(root["right"], key)
         return bn.get_size(root["left"])
+    
+def keys_range(root, key_lo, key_hi, list_key):
+    if root is None:
+        return
+    if key_lo< root["key"]:
+        keys_range(root["left"], key_lo, key_hi, list_key)
+    if key_lo <= root["key"] <= key_hi:
+        al.add_last(list_key, root["key"])
+    if key_hi> root["key"]:
+        keys_range(root["right"], key_lo, key_hi, list_key) 
+def keys (my_bst, key_lo, key_hi):
+    list_key= al.new_list()
+    keys_range(my_bst["root"], key_lo, key_hi, list_key)
+    return list_key
+
+
+def values_range(root, key_lo, key_hi, list_values):
+    if root is None:
+        return
+    if key_lo< root["key"]:
+        values_range(root["left"], key_lo, key_hi, list_values)
+    if key_lo <= root["key"] <= key_hi:
+        al.add_last(list_values, root["value"])
+    if key_hi> root["key"]:
+        values_range(root["right"], key_lo, key_hi, list_values) 
+def values (my_bst, key_lo, key_hi):
+    list_values= al.new_list()
+    values_range(my_bst["root"], key_lo, key_hi, list_values)
+    return list_values
