@@ -1,5 +1,6 @@
 import sys
 from App import logic as lg
+from tabulate import tabulate as tb
 
 def new_logic():
     """
@@ -48,9 +49,47 @@ def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    inicio = float(input("Ingrese el valor de inicio del rango de visibilidad\n"))
+    fin = float(input("Ingrese el valor de fin del rango de visibilidad\n"))
+    
+    rango = [inicio, fin]
+    estados = []
+    
+    num_estados = int(input("Ingrese el número de estados a mostrar\n"))
+    
+    for i in range(num_estados):
+        estado = input("Ingrese el estado\n")
+        estados.append(estado)
 
+    data = lg.req_2(control, rango, estados)
+    
+    total_accidentes = data["Accidentes Totales"]
+    peor = data["Peor accidente"]
+    
+    state_elements = data['state_analysis']['elements']
+    table_data = [[
+        element['Estado'],
+        element['Numero de accidentes'],
+        element['Visibilidad Promedio'],
+        element['Distancia']
+    ] for element in state_elements]
+
+    headers = ["Estado", "Numero de accidentes", "Visibilidad Promedio", "Distancia"]
+
+    peor_tabla = [[key, value] for key, value in peor.items()]
+
+    peor_headers = ["Atributo", "Valor"]
+
+    print("\n")
+    print(f"Total de accidentes: {total_accidentes}")
+    print("\n")
+    print("Peor accidente")
+    print("\n")
+    print(tb(peor_tabla, headers=peor_headers, tablefmt="fancy_grid"))
+    print("\n")
+    print("Analisis por estado")
+    print("\n")
+    print(tb(table_data, headers=headers, tablefmt="fancy_grid"))
 
 def print_req_3(control):
     """
