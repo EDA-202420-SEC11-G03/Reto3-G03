@@ -54,12 +54,13 @@ def print_req_1(control):
             info_accidente = {
                         "ID": i["ID"],
                         "Fecha y Hora de Inicio": i["Start_Time"],
-                        "Ciudad": i.get("City", "Desconocido"),
-                        "Estado": i.get("State", "Desconocido"),
+                        "Ciudad": i["City"],
+                        "Estado": i["State"],
+                        "Descripción": i["Description"][:40],
                         "Duración en Horas": duracion
                     }
             r.append(info_accidente)
-    print(r)
+    print(total, r)
 
 
 def print_req_2(control):
@@ -74,8 +75,28 @@ def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    r = []
+    x=input(print("Introduzca el número de accidentes a filtrar: "))
+    total, accidentes = lg.req_3(control, x)
+
+    for accidente in accidentes["elements"]:
+        for i in accidente["elements"]:
+            if i["End_Time"] == "Desconocido" or i["Start_Time"] == "Desconocido":
+                duracion = "Desconocido"
+            else:
+                duracion = i["End_Time"] - i["Start_Time"]
+            info_accidente = {
+                        "ID": i["ID"],
+                        "Fecha y Hora de Inicio": i["Start_Time"],
+                        "Ciudad": i["City"],                    
+                        "Estado": i["State"],
+                        "Precipitación": i["Precipitation(in)"],
+                        "Severidad": i["Severity"],
+                        "Descripción": i["Description"][:40],
+                        "Duración en Horas": duracion
+                    }
+            r.append(info_accidente)
+    print(total, r)
 
 
 def print_req_4(control):

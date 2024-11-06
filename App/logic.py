@@ -82,7 +82,7 @@ def load_data(catalog, filename):
                 bst.put(bst.get(catalog["treq2"], keytreq2), keytreq2sub, lista)
                     
        
-        if int(accidente["Severity"])>=3 and ("rain" in accidente["Weather_Condition"] or "snow" in accidente["Weather_Condition"]) and float(accidente["Visibility(mi)"])<2:   
+        if int(accidente["Severity"])>=3 and (("Rain" in accidente["Weather_Condition"] or "Snow" in accidente["Weather_Condition"])) and float(accidente["Visibility(mi)"])<2:   
             keytreq3= accidente["Start_Time"]
             if bst.contains(catalog["treq3"], keytreq3)== False:
                 lista=ar.new_list()
@@ -192,6 +192,7 @@ def req_1(catalog, p_start, p_end):
     f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
     n_cumplen = 0
     lista_accidentes = ar.new_list()
+
     
     def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
         nonlocal n_cumplen, lista_accidentes #elimina el error de referenciación
@@ -200,8 +201,7 @@ def req_1(catalog, p_start, p_end):
             return    
         fecha_accidente = nodo["key"] #Llaves son las fechas, asignadas desde el load_data
         accidentes = nodo["value"]
-        print("ACCIDENTES: ")
-        print(accidentes)      
+              
         ar.add_last(lista_accidentes, accidentes) 
          
         if f_inicial <= fecha_accidente <= f_final: #filtra el intervalo de las fechas parámetro     
@@ -214,10 +214,6 @@ def req_1(catalog, p_start, p_end):
     
     return n_cumplen, lista_accidentes
 
-            
-        
-    
-    
 
 
 def req_2(catalog):
@@ -228,12 +224,35 @@ def req_2(catalog):
     pass
 
 
-def req_3(catalog):
+def req_3(catalog, n:int):
     """
     Retorna el resultado del requerimiento 3
     """
-    # TODO: Modificar el requerimiento 3
-    pass
+    n_cumplen = 0 #contador de cuantos accidentes ya han sido añadidos
+    lista_accidentes = ar.new_list()
+    
+    rango = int(n) 
+    
+    def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
+        nonlocal n_cumplen, lista_accidentes
+        i = 0 
+        if nodo is None:
+            return      
+        accidentes = nodo["value"]
+        
+        while i < len(accidentes) and n_cumplen <= rango:
+            
+            ar.add_last(lista_accidentes,accidentes)
+            i += 1
+            n_cumplen += 1   
+        
+        filtro_intervalo(nodo["left"])      
+        filtro_intervalo(nodo["right"]) 
+        
+    filtro_intervalo(catalog["treq3"]["root"])
+    
+    return n_cumplen, lista_accidentes
+    
 
 
 def req_4(catalog):
@@ -244,7 +263,7 @@ def req_4(catalog):
     pass
 
 
-def req_5(catalog, fechaini, fechafin, condiciones):
+def req_5(catalog):
     """
     Retorna el resultado del requerimiento 5
     """
