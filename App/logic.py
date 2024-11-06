@@ -306,14 +306,41 @@ def req_7(catalog):
     pass
 
 
-def req_8(catalog):
+def req_8(my_bst):
     """
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    pass
+    elemdiametro= recursivareq8(my_bst["root"])
+    return elemdiametro[2]
 
-
+def recursivareq8(root):
+    if root==None:
+        return -1,0,[]
+    else:
+        infoleft = recursivareq8(root["left"])
+        inforight = recursivareq8(root["right"])
+        alturleft= infoleft[0]
+        diametroleft= infoleft[1]
+        elementosleft= infoleft[2]
+        alturright= inforight[0]
+        diametroright= inforight[1]
+        elementosright= inforight[2]
+        
+        alturasubarbol = bst.height_tree(root)
+        diametrosubarbol = 2 + alturleft + alturright
+        if diametrosubarbol >= diametroleft and diametrosubarbol >= diametroright:
+            if diametroleft>diametroright:
+                camino = elementosleft[::-1] + [root["value"]] + elementosright
+            if diametroright>=diametroleft:
+                camino =[root["value"]] + elementosright
+            return alturasubarbol, diametrosubarbol, camino
+        elif diametroleft >= diametroright:
+            camino = elementosleft[::-1] + [root["value"]]
+            return alturasubarbol, diametroleft, camino
+        else:
+            camino = [root["value"]] + elementosright
+            return alturasubarbol, diametroright, camino
 # Funciones para medir tiempos de ejecucion
 
 def get_time():

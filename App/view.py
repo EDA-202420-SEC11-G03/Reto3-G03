@@ -99,8 +99,48 @@ def print_req_8(control):
         Función que imprime la solución del Requerimiento 8 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 8
-    pass
-
+    #x=input(print("introduzca el bst: "))
+    arbol = {
+        "root": {
+            "value": 1,
+            "left": {
+                "value": 2,
+                "left": {
+                    "value": 4,
+                    "left": None,
+                    "right": None
+                },
+                "right": {
+                    "value": 5,
+                    "left": {
+                        "value": 8,
+                        "left": None,
+                        "right": None
+                    },
+                    "right": {
+                        "value": 9,
+                        "left": None,
+                        "right": None
+                    }
+                }
+            },
+            "right": {
+                "value": 3,
+                "left": {
+                    "value": 6,
+                    "left": None,
+                    "right": None
+                },
+                "right": {
+                    "value": 7,
+                    "left": None,
+                    "right": None
+                }
+            }
+        }
+    }
+    rta = lg.req_8(arbol)
+    print(rta)
 
 # Se crea la lógica asociado a la vista
 control = new_logic()
