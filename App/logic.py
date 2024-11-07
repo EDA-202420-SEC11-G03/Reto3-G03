@@ -94,18 +94,18 @@ def load_data(catalog, filename):
                 lista  = ar.add_last(lista, accidente)
                 bst.put(catalog["treq3"], keytreq3, lista)           
         
-        if int(accidente["Severity"])>=3 and float(accidente["Visibility(mi)"])<1:
-            keytreq4= accidente["Start_Time"]
-            if bst.contains(catalog["treq4"], keytreq4)== False:
+        if int(accidente["Severity"]) >= 3 and float(accidente["Visibility(mi)"]) < 1:
+            keytreq4 = accidente["Start_Time"]
+            if bst.contains(catalog["treq4"], keytreq4) == False:
                 bst.put(catalog["treq4"], keytreq4, bst.new_map())   
-            keytreq4sub= accidente["Street"]
-            if bst.contains(bst.get(catalog["treq4"], keytreq4), keytreq4sub)== False:
-                lista=ar.new_list()
-                lista= ar.add_last(lista, accidente)
+            keytreq4sub = accidente["Street"]
+            if bst.contains(bst.get(catalog["treq4"], keytreq4), keytreq4sub) == False:
+                lista = ar.new_list()
+                lista = ar.add_last(lista, accidente)
                 bst.put(bst.get(catalog["treq4"], keytreq4), keytreq4sub, lista)
             else:
                 lista = bst.get(bst.get(catalog["treq4"], keytreq4), keytreq4sub)
-                lista  = ar.add_last(lista, accidente)
+                lista = ar.add_last(lista, accidente)
                 bst.put(bst.get(catalog["treq4"], keytreq4), keytreq4sub, lista)
                 
         if int(accidente["Severity"])>=3:
@@ -268,12 +268,98 @@ def req_3(catalog):
     pass
 
 
-def req_4(catalog):
+def req_4(catalog, time1, time2):
     """
     Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 4
-    pass
+    tree = catalog["treq4"]
+    result = ar.new_list()
+    
+    dates_set = bst.key_set(tree)
+   
+    fecha1 = datetime.strptime(time1, "%Y-%m-%d %H:%M:%S")
+    fecha2 = datetime.strptime(time2, "%Y-%m-%d %H:%M:%S")
+                      
+   
+    for date in dates_set["elements"]:
+        if fecha1 <= date <= fecha2:
+            street_accidents = bst.get(tree, date)
+           
+            street_accidents_set = bst.key_set(street_accidents)
+           
+            for street in street_accidents_set["elements"]:
+                accidents = bst.get(street_accidents, street)
+                analisis_via = {
+                    "Calle": "",
+                    "Peligrosidad (promedio de severidad)": 0,
+                    "Numero de accidentes (severidad 3)": 0,
+                    "Numero de accidentes (severidad 4)": 0,
+                    "Visibilidad promedio": 0
+                }
+                num_accidents = 0
+                num_accidents_severity_3 = 0
+                num_accidents_severity_4 = 0
+                total_severity = 0
+                total_visibility = 0
+                
+                for accident in accidents["elements"]:
+                    num_accidents += 1
+                    total_severity += int(accident["Severity"])
+                    total_visibility += float(accident["Visibility(mi)"])
+                    if int(accident["Severity"]) == 3:
+                        num_accidents_severity_3 += 1
+                    elif int(accident["Severity"]) == 4:
+                        num_accidents_severity_4 += 1
+                    analisis_via["Calle"] = f"{street}, {accident['City']}, {accident['State']}"
+                
+                analisis_via["Peligrosidad (promedio de severidad)"] = round(total_severity / num_accidents, 2)
+                analisis_via["Numero de accidentes (severidad 3)"] = num_accidents_severity_3
+                analisis_via["Numero de accidentes (severidad 4)"] = num_accidents_severity_4
+                analisis_via["Visibilidad promedio"] = round(total_visibility / num_accidents, 2)
+                
+                ar.add_last(result, analisis_via)
+                
+    return result
+    
+    # for street in streets_set["elements"]:
+    #     if bst.contains(tree, street):
+    #         accidents = bst.get(tree, street)
+    #         analisis_via = {
+    #             "Calle": "",
+    #             "Peligrosidad (promedio de severidad)": 0,
+    #             "Numero de accidentes (severidad 3)": 0,
+    #             "Numero de accidentes (severidad 4)": 0,
+    #             "Visibilidad promedio": 0
+    #         }
+    #         num_accidents = 0
+    #         num_accidents_severity_3 = 0
+    #         num_accidents_severity_4 = 0
+    #         total_severity = 0
+    #         total_visibility = 0
+            
+    #         print(accidents)
+            
+    #         for accident in accidents["elements"]:
+                    
+ 
+                    
+    #                 num_accidents += 1
+    #                 total_severity += int(accident["Severity"])
+    #                 total_visibility += float(accident["Visibility(mi)"])
+    #                 if int(accident["Severity"]) == 3:
+    #                     num_accidents_severity_3 += 1
+    #                 elif int(accident["Severity"]) == 4:
+    #                     num_accidents_severity_4 += 1
+    #                 analisis_via["Calle"] = f"{street}, {accident['City']}, {accident['State']}"
+        
+    #         analisis_via["Peligrosidad (promedio de severidad)"] = round(total_severity / num_accidents, 2)
+    #         analisis_via["Numero de accidentes (severidad 3)"] = num_accidents_severity_3
+    #         analisis_via["Numero de accidentes (severidad 4)"] = num_accidents_severity_4
+    #         analisis_via["Visibilidad promedio"] = round(total_visibility / num_accidents, 2)
+            
+    #         ar.add_last(result, analisis_via)
+            
+    # return result
 
 
 def req_5(catalog):

@@ -104,8 +104,25 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    fecha1 = input("Ingrese la fecha de inicio en formato %Y-%m-%d %H:%M:%S\n")
+    fecha2 = input("Ingrese la fecha de fin en formato %Y-%m-%d %H:%M:%S\n")
+    
+    data = lg.req_4(control, fecha1, fecha2)
+    
+    for infovia in data["elements"]:
+        
+        table_data = [[
+            infovia['Calle'],
+            infovia['Peligrosidad (promedio de severidad)'],
+            infovia['Numero de accidentes (severidad 3)'],
+            infovia['Numero de accidentes (severidad 4)'],
+            infovia['Visibilidad promedio']
+        ]]
 
+        headers = ["Calle", "Peligrosidad (promedio de severidad)", "Numero de accidentes (severidad 3)", "Numero de accidentes (severidad 4)", "Visibilidad promedio"]
+
+        print(tb(table_data, headers=headers, tablefmt="fancy_grid"))
+        print("\n")
 
 def print_req_5(control):
     """
