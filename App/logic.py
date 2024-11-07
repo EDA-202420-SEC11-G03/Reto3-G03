@@ -143,12 +143,7 @@ def load_data(catalog, filename):
                 
                 
         keytreq7= accidente["ID"]
-        if bst.contains(catalog["treq7"], keytreq7) == False:
-            bst.put(catalog["treq7"], keytreq7, bst.new_map())
-        else:
-            lista = bst.get(catalog["treq7"], keytreq7)
-            lista = ar.add_last(lista, accidente)
-            bst.put(catalog["treq7"], keytreq7, lista)        
+        bst.put(catalog["treq7"], keytreq7, accidente)      
             
     primeros= listadeaccientes["elements"][:5]
     ultimos= listadeaccientes["elements"][-5:]
@@ -325,12 +320,43 @@ def req_6(catalog):
     pass
 
 
-def req_7(catalog):
+def req_7(catalog, lat_start, lon_start, lat_end, lon_end):
     """
     Retorna el resultado del requerimiento 7
     """
-    # TODO: Modificar el requerimiento 7
-    pass
+    tree = catalog["treq7"]
+    
+    print(tree)
+    
+    id_set = bst.key_set(tree)
+    
+    result = ar.new_list()
+    
+    for key in id_set["elements"]:
+        accident = bst.get(tree, key) 
+        print(accident)
+        if float(lat_start) <= float(accident["Start_Lat"]) <= float(lat_end) and float(lon_start) <= float(accident["Start_Lng"]) <= float(lon_end):
+            ar.add_last(result, accident)
+    
+    ar.merge_sort(result, compare_lat_lon)
+    
+    retorno = ar.new_list()
+    
+    if ar.size(result) > 10:
+        sub1 = ar.sub_list(result, 0, 5)
+        sub2 = ar.sub_list(result, ar.size(result) - 5, 5)
+        
+        for accident in sub1["elements"]:
+            ar.add_last(retorno, accident)
+        for accident in sub2["elements"]:
+            ar.add_last(retorno, accident)
+            
+    else:
+        for accident in result["elements"]:
+            ar.add_last(retorno, accident)
+            
+    return retorno
+    
 
 
 def req_8(catalog):
@@ -364,6 +390,11 @@ def compare_accidents_number(acc1, acc2):
 
 def compare_accidents_visibility(acc1, acc2):
     if acc1["Visibilidad Promedio"] < acc2["Visibilidad Promedio"]:
+        return True
+    return False
+
+def compare_lat_lon(acc1, acc2):
+    if (acc1["Start_Lat"], acc1["Start_Lng"], acc1["End_Lat"], acc1["End_Lng"]) < (acc2["Start_Lat"], acc2["Start_Lng"], acc2["End_Lat"], acc2["End_Lng"]):
         return True
     return False
     

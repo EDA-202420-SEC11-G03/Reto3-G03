@@ -144,8 +144,24 @@ def print_req_7(control):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    lat_start = float(input("Ingrese la latitud de inicio\n"))
+    lon_start = float(input("Ingrese la longitud de inicio\n"))
+    lat_end = float(input("Ingrese la latitud de fin\n"))
+    lon_end = float(input("Ingrese la longitud de fin\n"))
+    
+    data = lg.req_7(control, lat_start, lon_start, lat_end, lon_end)
+    
+    table_data = [[
+        accident['ID'],
+        accident['Start_Time'],
+        accident['City'],
+        accident['State'],
+        accident['Description']
+    ] for accident in data["elements"]]
+
+    headers = ["ID", "Fecha y hora de inicio", "Ciudad", "Estado", "Descripcion", "Tiempo de duracion"]
+
+    print(tb(table_data, headers=headers, tablefmt="fancy_grid"))
 
 
 def print_req_8(control):
