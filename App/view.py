@@ -1,7 +1,7 @@
 import sys
 from App import logic as lg
 from tabulate import tabulate as tb
-
+from datetime import datetime
 def new_logic():
     """
         Se crea una instancia del controlador
@@ -41,8 +41,32 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    r = []
+    x=input(print("Introduzca el inicio de la fecha a filtrar: "))
+    y=input(print("Introduzca el final de la fecha a filtrar: "))
+    total, accidentes = lg.req_1(control, x,y)
+
+    for accidente in accidentes["elements"]:
+        for i in accidente["elements"]:
+            if i["End_Time"] == "Desconocido" or i["Start_Time"] == "Desconocido":
+                duracion = "Desconocido"
+            else:
+                duracion = i["End_Time"] - i["Start_Time"]
+            info_accidente = {
+                        "ID": i["ID"],
+                        "Fecha y Hora de Inicio": i["Start_Time"].strftime("%Y-%m-%d %H:%M"),
+                        "Ciudad": i["City"],
+                        "Estado": i["State"],
+                        "Descripción": i["Description"][:40],
+                        "Duración en Horas": duracion
+                    }
+            r.append(info_accidente)
+    
+    if len(r) > 10:
+        final = r[:5], r[-5:]
+    else: 
+        final = r   
+    print(total, final)
 
 
 def print_req_2(control):
@@ -95,8 +119,28 @@ def print_req_3(control):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    r = []
+    x=input(print("Introduzca el número de accidentes a filtrar: "))
+    total, accidentes = lg.req_3(control, x)
+
+    for accidente in accidentes["elements"]:
+        for i in accidente["elements"]:
+            if i["End_Time"] == "Desconocido" or i["Start_Time"] == "Desconocido":
+                duracion = "Desconocido"
+            else:
+                duracion = i["End_Time"] - i["Start_Time"]
+            info_accidente = {
+                        "ID": i["ID"],
+                        "Fecha y Hora de Inicio": i["Start_Time"].strftime("%Y-%m-%d %H:%M"),
+                        "Ciudad": i["City"],                    
+                        "Estado": i["State"],
+                        "Precipitación": i["Precipitation(in)"],
+                        "Severidad": i["Severity"],
+                        "Descripción": i["Description"][:40],
+                        "Duración en Horas": duracion 
+                    }
+            r.append(info_accidente)
+    print(total, r)
 
 
 def print_req_4(control):
@@ -129,15 +173,25 @@ def print_req_5(control):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
-
-
+    x= input(print("introduzca fecha inical: "))
+    y= input(print("introduzca fecha final: "))
+    z= input(print("introduzca codiciones: "))
+    rta= lg.req_5(control, x, y, z)
+    print(rta)
 def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    a= input(print("introduzca fecha inical: "))
+    b= input(print("introduzca fecha final: "))
+    c= input(print("introduzca umbral de humedad: "))
+    d= input(print("introduzca lista de condados: "))
+    rta= lg.req_6(control, a,b,c,d)
+    print(rta)
+    
+    
+    
+    
 
 
 def print_req_7(control):
