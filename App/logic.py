@@ -4,6 +4,7 @@ import csv
 from datetime import datetime
 from DataStructures.List import array_list as ar
 
+
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
