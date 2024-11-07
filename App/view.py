@@ -1,5 +1,7 @@
 import sys
 from App import logic as lg
+from datetime import datetime
+
 
 def new_logic():
     """
@@ -53,14 +55,19 @@ def print_req_1(control):
                 duracion = i["End_Time"] - i["Start_Time"]
             info_accidente = {
                         "ID": i["ID"],
-                        "Fecha y Hora de Inicio": i["Start_Time"],
+                        "Fecha y Hora de Inicio": i["Start_Time"].strftime("%Y-%m-%d %H:%M"),
                         "Ciudad": i["City"],
                         "Estado": i["State"],
                         "Descripción": i["Description"][:40],
                         "Duración en Horas": duracion
                     }
             r.append(info_accidente)
-    print(total, r)
+    
+    if len(r) > 10:
+        final = r[:5], r[-5:]
+    else: 
+        final = r   
+    print(total, final)
 
 
 def print_req_2(control):
@@ -87,13 +94,13 @@ def print_req_3(control):
                 duracion = i["End_Time"] - i["Start_Time"]
             info_accidente = {
                         "ID": i["ID"],
-                        "Fecha y Hora de Inicio": i["Start_Time"],
+                        "Fecha y Hora de Inicio": i["Start_Time"].strftime("%Y-%m-%d %H:%M"),
                         "Ciudad": i["City"],                    
                         "Estado": i["State"],
                         "Precipitación": i["Precipitation(in)"],
                         "Severidad": i["Severity"],
                         "Descripción": i["Description"][:40],
-                        "Duración en Horas": duracion
+                        "Duración en Horas": duracion 
                     }
             r.append(info_accidente)
     print(total, r)
@@ -121,8 +128,16 @@ def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    a= input(print("introduzca fecha inical: "))
+    b= input(print("introduzca fecha final: "))
+    c= input(print("introduzca umbral de humedad: "))
+    d= input(print("introduzca lista de condados: "))
+    rta= lg.req_6(control, a,b,c,d)
+    print(rta)
+    
+    
+    
+    
 
 
 def print_req_7(control):

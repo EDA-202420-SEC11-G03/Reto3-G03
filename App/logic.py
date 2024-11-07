@@ -159,7 +159,9 @@ def load_data(catalog, filename):
         else:
             lista = bst.get(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub)
             lista = ar.add_last(lista, accidente)
-            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)           
+            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)   
+            
+                    
     primeros= listadeaccientes["elements"][:5]
     ultimos= listadeaccientes["elements"][-5:]
     info= ar.new_list()
@@ -239,9 +241,7 @@ def req_3(catalog, n:int):
         if nodo is None:
             return      
         accidentes = nodo["value"]
-        
-        while i < len(accidentes) and n_cumplen <= rango:
-            
+        while i < len(accidentes) and n_cumplen < rango:           
             ar.add_last(lista_accidentes,accidentes)
             i += 1
             n_cumplen += 1   
@@ -324,12 +324,42 @@ def req_5(catalog):
                 dic["predominante"]["cantidad"]= dic[condicion]    
                 dic["predominante"]["condicion"]= condicion
     return lista
-def req_6(catalog):
+
+def req_6(catalog, p_start, p_end, umbral, condados:list ):
     """
     Retorna el resultado del requerimiento 6
     """
-    # TODO: Modificar el requerimiento 6
-    pass
+    n_cumplen = 0 #contador de cuantos accidentes ya han sido añadidos
+    lista_accidentes = ar.new_list()
+    f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
+    f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
+    
+  
+    def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
+        nonlocal n_cumplen, lista_accidentes
+        
+        if nodo is None:
+            return      
+        
+        f_accidente = nodo["key"]
+        accidentes = nodo["value"]
+            
+        for i in bst.key_set(accidentes)["elements"]:
+            humedad_actual = i
+            if f_inicial < f_accidente < f_final and humedad_actual > umbral:
+                ar.add_last(lista_accidentes,accidentes)
+                n_cumplen += 1   
+        
+        filtro_intervalo(nodo["left"])      
+        filtro_intervalo(nodo["right"])     
+    filtro_intervalo(catalog["treq6"]["root"])
+    
+    for county in lista_accidentes["elements"]["value"]["value"]["elements"]:
+        print(county)
+        print("\n")
+    
+    return 
+    
 
 
 def req_7(catalog):
