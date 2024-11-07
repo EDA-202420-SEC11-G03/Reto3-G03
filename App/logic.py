@@ -142,25 +142,14 @@ def load_data(catalog, filename):
                 bst.put(bst.get(bst.get(catalog["treq6"], keytreq6), keytreq6sub), keytreq6subsub, lista)
                 
                 
-                
-        keytreq7= accidente["Start_Lat"]
-        if bst.contains(catalog["treq7"], keytreq7)== False:
+        keytreq7= accidente["ID"]
+        if bst.contains(catalog["treq7"], keytreq7) == False:
             bst.put(catalog["treq7"], keytreq7, bst.new_map())
-        keytreq7sub= accidente["Start_Lng"]
-        if bst.contains(bst.get(catalog["treq7"], keytreq7), keytreq7sub)== False:
-            bst.put(bst.get(catalog["treq7"], keytreq7), keytreq7sub, bst.new_map())
-        keytreq7subsub= accidente["End_Lat"]
-        if bst.contains(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub)== False:
-            bst.put(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub, bst.new_map())
-        keytreq7subsubsub= accidente["End_Lng"] 
-        if bst.contains(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub) == False:
-            lista = ar.new_list()
-            lista = ar.add_last(lista, accidente)
-            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)
         else:
-            lista = bst.get(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub)
+            lista = bst.get(catalog["treq7"], keytreq7)
             lista = ar.add_last(lista, accidente)
-            bst.put(bst.get(bst.get(bst.get(catalog["treq7"], keytreq7), keytreq7sub), keytreq7subsub), keytreq7subsubsub, lista)           
+            bst.put(catalog["treq7"], keytreq7, lista)        
+            
     primeros= listadeaccientes["elements"][:5]
     ultimos= listadeaccientes["elements"][-5:]
     info= ar.new_list()
@@ -320,47 +309,6 @@ def req_4(catalog, time1, time2):
                 ar.add_last(result, analisis_via)
                 
     return result
-    
-    # for street in streets_set["elements"]:
-    #     if bst.contains(tree, street):
-    #         accidents = bst.get(tree, street)
-    #         analisis_via = {
-    #             "Calle": "",
-    #             "Peligrosidad (promedio de severidad)": 0,
-    #             "Numero de accidentes (severidad 3)": 0,
-    #             "Numero de accidentes (severidad 4)": 0,
-    #             "Visibilidad promedio": 0
-    #         }
-    #         num_accidents = 0
-    #         num_accidents_severity_3 = 0
-    #         num_accidents_severity_4 = 0
-    #         total_severity = 0
-    #         total_visibility = 0
-            
-    #         print(accidents)
-            
-    #         for accident in accidents["elements"]:
-                    
- 
-                    
-    #                 num_accidents += 1
-    #                 total_severity += int(accident["Severity"])
-    #                 total_visibility += float(accident["Visibility(mi)"])
-    #                 if int(accident["Severity"]) == 3:
-    #                     num_accidents_severity_3 += 1
-    #                 elif int(accident["Severity"]) == 4:
-    #                     num_accidents_severity_4 += 1
-    #                 analisis_via["Calle"] = f"{street}, {accident['City']}, {accident['State']}"
-        
-    #         analisis_via["Peligrosidad (promedio de severidad)"] = round(total_severity / num_accidents, 2)
-    #         analisis_via["Numero de accidentes (severidad 3)"] = num_accidents_severity_3
-    #         analisis_via["Numero de accidentes (severidad 4)"] = num_accidents_severity_4
-    #         analisis_via["Visibilidad promedio"] = round(total_visibility / num_accidents, 2)
-            
-    #         ar.add_last(result, analisis_via)
-            
-    # return result
-
 
 def req_5(catalog):
     """
