@@ -516,7 +516,7 @@ def req_7(catalog, lat_start, lon_start, lat_end, lon_end):
     
 
 
-def req_8(catalog):
+def req_8(my_bst):
     """
     Retorna el resultado del requerimiento 8
     """
