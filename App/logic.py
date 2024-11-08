@@ -474,7 +474,7 @@ def req_6(catalog, p_start, p_end, umbral, condados:list ):
             for cond in condados ["elements"]:
                 for diccondado in diccondados ["elements"]:
                     if cond==diccondado["condado"]:
-                        accidentes = bst-get(arbolcondado, cond)
+                        accidentes = bst.get(arbolcondado, cond)
                         for accidente in accidentes:
                             diccondado ["numero"]+=1
                             diccondado ["temperatura promedio"]+= accidente ["Temperature (F)"]
