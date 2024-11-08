@@ -311,38 +311,29 @@ def req_8(my_bst):
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    elemdiametro= recursivareq8(my_bst["root"])
+    elemdiametro= recursiva_diametro(my_bst["root"])
     return elemdiametro[2]
+def recursiva_diametro(root):
+    if root is None:
+        return 0,0,[],[]
+    izquierda= recursiva_diametro(root["left"])
+    derecha= recursiva_diametro(root["right"])
 
-def recursivareq8(root):
-    if root==None:
-        return -1,0,[]
+    alturaactual= bst.height_tree(root)
+    if izquierda[0] > derecha[0]:
+        caminolargo= [root["key"]] + izquierda[3]
     else:
-        infoleft = recursivareq8(root["left"])
-        inforight = recursivareq8(root["right"])
-        alturleft= infoleft[0]
-        diametroleft= infoleft[1]
-        elementosleft= infoleft[2]
-        alturright= inforight[0]
-        diametroright= inforight[1]
-        elementosright= inforight[2]
+        caminolargo= [root["key"]] + derecha[3]
         
-        alturasubarbol = bst.height_tree(root)
-        diametrosubarbol = 2 + alturleft + alturright
-        if diametrosubarbol >= diametroleft and diametrosubarbol >= diametroright:
-            if diametroleft>diametroright:
-                camino = elementosleft[::-1] + [root["value"]] + elementosright
-            if diametroright>=diametroleft:
-                camino =[root["value"]] + elementosright
-            return alturasubarbol, diametrosubarbol, camino
-        elif diametroleft >= diametroright:
-            camino = elementosleft[::-1] + [root["value"]]
-            return alturasubarbol, diametroleft, camino
-        else:
-            camino = [root["value"]] + elementosright
-            return alturasubarbol, diametroright, camino
-# Funciones para medir tiempos de ejecucion
-
+    diametronodo= float(izquierda[0]) + float(derecha[0])
+    caminonodo= izquierda[3][::-1] + [root["key"]] + derecha[3]
+    if (izquierda[1])> diametronodo:
+        diametronodo= izquierda[1]
+        caminonodo= izquierda[3]
+    if (derecha[1])> diametronodo:
+        diametronodo= derecha[1]
+        caminonodo= derecha[3] 
+    return alturaactual, diametronodo, caminonodo, caminolargo
 def get_time():
     """
     devuelve el instante tiempo de procesamiento en milisegundos
