@@ -368,7 +368,7 @@ def req_4(catalog, time1, time2):
                 
     return result
 
-def req_5(catalog):
+def req_5(catalog, fechaini, fechafin, condiciones):
     """
     Retorna el resultado del requerimiento 5
     """
