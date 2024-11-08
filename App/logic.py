@@ -526,7 +526,34 @@ def req_8(catalog):
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    pass
+    inicio = get_time()
+    elemdiametro= recursiva_diametro(my_bst["root"])
+    final = get_time()
+    print(delta_time(inicio,final))
+    return elemdiametro[2]
+    
+def recursiva_diametro(root):
+    
+    if root is None:
+        return 0,0,[],[]
+    izquierda= recursiva_diametro(root["left"])
+    derecha= recursiva_diametro(root["right"])
+
+    alturaactual= bst.height_tree(root)
+    if izquierda[0] > derecha[0]:
+        caminolargo= [root["key"]] + izquierda[3]
+    else:
+        caminolargo= [root["key"]] + derecha[3]
+        
+    diametronodo= float(izquierda[0]) + float(derecha[0])
+    caminonodo= izquierda[3][::-1] + [root["key"]] + derecha[3]
+    if (izquierda[1])> diametronodo:
+        diametronodo= izquierda[1]
+        caminonodo= izquierda[3]
+    if (derecha[1])> diametronodo:
+        diametronodo= derecha[1]
+        caminonodo= derecha[3] 
+    return alturaactual, diametronodo, caminonodo, caminolargo
 
 
 # Funciones para medir tiempos de ejecucion
