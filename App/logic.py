@@ -449,33 +449,30 @@ def req_6(catalog, p_start, p_end, umbral, condados:list ):
     """
     Retorna el resultado del requerimiento 6
     """
-    n_cumplen = 0 #contador de cuantos accidentes ya han sido añadidos
-    lista_accidentes = ar.new_list()
-    f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
-    f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
-    
-    def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
-        nonlocal n_cumplen, lista_accidentes
-        
-        if nodo is None:
-            return      
-        
-        f_accidente = nodo["key"]
-        accidentes = nodo["value"]
-            
-        for i in bst.key_set(accidentes)["elements"]:
-            humedad_actual = i
-            if f_inicial < f_accidente < f_final and humedad_actual > umbral:
-                ar.add_last(lista_accidentes,accidentes)
-                n_cumplen += 1   
-        
-        filtro_intervalo(nodo["left"])      
-        filtro_intervalo(nodo["right"])     
-    filtro_intervalo(catalog["treq6"]["root"])
-    
-    for county in lista_accidentes["elements"]["value"]["value"]["elements"]:
-        print(county)
-        print("\n")
+    condados = condados.split()
+    fechaini = datetime.strptime(fechaini,"%Y-%m-%d %H:%M:%S")
+    fechafin = datetime.strptime(fechafin,"%Y-%m-%d %H:%M:%S")
+    trees = bst.values(catalog["treq6"], fechaini, fechafin)
+    diccondados = ar.new_list()
+    for condado in condados:
+        nuevodic= {"condado": condado,
+            "numero":0,
+            "temperatura promedio":0,
+            "velocidad promedio": 0,
+            "humedad promedio": 0,
+            "distancia promedio": 0}
+        ar.add_last (diccondados, nuevodic)
+    for tree in trees["elements"]:
+        arbolescondados= bst.values(tree, humedad, 100)
+        for arbolcondado in arbolescondados ["elements"]:
+            condados = bst.key_set(arbolcondado)
+            for cond in condados ["elements"]:
+                for diccondado in diccondados ["elements"]:
+                    if cond==diccondado["condado"]:
+                        accidentes = bst-get(arbolcondado, cond)
+                        for accidente in accidentes:
+                            diccondado ["numero"]+=1
+                            diccondado ["temperatura promedio"]+= accidente ["Temperature (F)"]
     
     return 
     
