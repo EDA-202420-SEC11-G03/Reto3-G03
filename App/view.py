@@ -1,7 +1,7 @@
 import sys
 from App import logic as lg
-from tabulate import tabulate as tb
 from datetime import datetime
+from tabulate import tabulate as tb
 def new_logic():
     """
         Se crea una instancia del controlador
@@ -44,7 +44,7 @@ def print_req_1(control):
     r = []
     x=input(print("Introduzca el inicio de la fecha a filtrar: "))
     y=input(print("Introduzca el final de la fecha a filtrar: "))
-    total, accidentes = lg.req_1(control, x,y)
+    total, accidentes, tiempo = lg.req_1(control, x,y)
 
     for accidente in accidentes["elements"]:
         for i in accidente["elements"]:
@@ -66,7 +66,7 @@ def print_req_1(control):
         final = r[:5], r[-5:]
     else: 
         final = r   
-    print(total, final)
+    print(total, final, tiempo)
 
 
 def print_req_2(control):
@@ -114,6 +114,7 @@ def print_req_2(control):
     print("Analisis por estado")
     print("\n")
     print(tb(table_data, headers=headers, tablefmt="fancy_grid"))
+    print(data["tiempo"])
 
 def print_req_3(control):
     """
@@ -121,7 +122,7 @@ def print_req_3(control):
     """
     r = []
     x=input(print("Introduzca el número de accidentes a filtrar: "))
-    total, accidentes = lg.req_3(control, x)
+    total, accidentes, tiempo = lg.req_3(control, x)
 
     for accidente in accidentes["elements"]:
         for i in accidente["elements"]:
@@ -140,7 +141,7 @@ def print_req_3(control):
                         "Duración en Horas": duracion 
                     }
             r.append(info_accidente)
-    print(total, r)
+    print(total, r, tiempo)
 
 
 def print_req_4(control):
@@ -178,6 +179,7 @@ def print_req_5(control):
     z= input(print("introduzca codiciones: "))
     rta= lg.req_5(control, x, y, z)
     print(rta)
+    
 def print_req_6(control):
     """
         Función que imprime la solución del Requerimiento 6 en consola

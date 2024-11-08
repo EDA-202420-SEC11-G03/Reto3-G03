@@ -191,6 +191,7 @@ def req_1(catalog, p_start, p_end):
     """
     Retorna el resultado del requerimiento 1
     """
+    start = get_time()
     f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
     f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
     n_cumplen = 0
@@ -215,7 +216,9 @@ def req_1(catalog, p_start, p_end):
             filtro_intervalo(nodo["right"]) #evalúa por qué dirección del arbol debe continuar
     filtro_intervalo(catalog["treq1"]["root"])
     
-    return n_cumplen, lista_accidentes
+    end = get_time()
+    tiempo = delta_time(start,end)
+    return n_cumplen, lista_accidentes, tiempo
 
 
 
@@ -229,6 +232,7 @@ def req_2(catalog, visibility_range, states):
     
     :returns: Un análisis detallado de los accidentes que cumplen los criterios.
     """
+    start = get_time()
     tree = catalog["treq2"]
     result = {
         "Accidentes Totales": 0,
@@ -282,6 +286,9 @@ def req_2(catalog, visibility_range, states):
     ar.shell_sort(result["state_analysis"], compare_accidents_number)
     result["Accidentes Totales"] = total_accidents
     result["Peor accidente"] = worst_accident
+    end = get_time()
+    tiempo = delta_time(start,end)
+    result["tiempo"] = tiempo
     
     return result
 
@@ -290,6 +297,7 @@ def req_3(catalog, n:int):
     """
     Retorna el resultado del requerimiento 3
     """
+    inicio =get_time()
     n_cumplen = 0 #contador de cuantos accidentes ya han sido añadidos
     lista_accidentes = ar.new_list()
     
@@ -310,8 +318,9 @@ def req_3(catalog, n:int):
         filtro_intervalo(nodo["right"]) 
         
     filtro_intervalo(catalog["treq3"]["root"])
-    
-    return n_cumplen, lista_accidentes
+    final = get_time()
+    tiempo = delta_time(inicio,final)
+    return n_cumplen, lista_accidentes, tiempo
     
 
 
@@ -319,6 +328,7 @@ def req_4(catalog, time1, time2):
     """
     Retorna el resultado del requerimiento 4
     """
+    inicio = get_time()
     tree = catalog["treq4"]
     result = ar.new_list()
     
@@ -365,7 +375,8 @@ def req_4(catalog, time1, time2):
                 analisis_via["Visibilidad promedio"] = round(total_visibility / num_accidents, 2)
                 
                 ar.add_last(result, analisis_via)
-                
+    final = get_time()
+    print(delta_time(inicio,final)        )    
     return result
 
 def req_5(catalog):
@@ -373,6 +384,7 @@ def req_5(catalog):
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
+    inicio = get_time()
     condiciones = condiciones.split(",")
     fechaini = datetime.strptime(fechaini, '%Y-%m-%d')
     fechafin = datetime.strptime(fechafin, '%Y-%m-%d')
@@ -420,6 +432,7 @@ def req_5(catalog):
     ar.add_last(lista, dicmañana)
     ar.add_last(lista, dictarde)
     ar.add_last(lista, dicnoche)
+    
     for dic in lista["elements"]:
         if dic["numero"]!=0:
             dic["promedio"]= dic["promedio"]/ dic["numero"]
@@ -428,6 +441,8 @@ def req_5(catalog):
             if dic[condicion]>dic["predominante"]["cantidad"]:
                 dic["predominante"]["cantidad"]= dic[condicion]    
                 dic["predominante"]["condicion"]= condicion
+    final = get_time()
+    print(delta_time(inicio, final))
     return lista
 
 def req_6(catalog, p_start, p_end, umbral, condados:list ):
@@ -439,7 +454,6 @@ def req_6(catalog, p_start, p_end, umbral, condados:list ):
     f_inicial = datetime.strptime(p_start, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
     f_final = datetime.strptime(p_end, "%Y-%m-%d %H:%M:%S") #conversión a formato adecuado
     
-  
     def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
         nonlocal n_cumplen, lista_accidentes
         
