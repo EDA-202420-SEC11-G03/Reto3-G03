@@ -303,3 +303,14 @@ def values (my_bst, key_lo, key_hi):
     list_values= al.new_list()
     values_range(my_bst["root"], key_lo, key_hi, list_values)
     return list_values
+def height_tree(root):
+    if root is None:
+        return -1  
+    else:
+        altura_izquierda = height_tree(root["left"])
+        altura_derecha = height_tree(root["right"])
+
+        return 1 + max(altura_izquierda, altura_derecha)
+def height(my_bst):
+    altura= height_tree(my_bst["root"])
+    return altura

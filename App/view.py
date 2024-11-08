@@ -223,8 +223,10 @@ def print_req_8(control):
         Función que imprime la solución del Requerimiento 8 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 8
-    pass
+    #x=input(print("introduzca el bst: "))
 
+    rta = lg.req_8(control["treq7"])
+    print(rta)
 
 # Se crea la lógica asociado a la vista
 control = new_logic()
