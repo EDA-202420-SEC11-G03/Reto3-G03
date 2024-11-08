@@ -373,6 +373,7 @@ def req_5(catalog, fechaini, fechafin, condiciones):
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
+    
     condiciones = condiciones.split(",")
     fechaini = datetime.strptime(fechaini, '%Y-%m-%d')
     fechafin = datetime.strptime(fechafin, '%Y-%m-%d')
@@ -428,17 +429,8 @@ def req_5(catalog, fechaini, fechafin, condiciones):
             if dic[condicion]>dic["predominante"]["cantidad"]:
                 dic["predominante"]["cantidad"]= dic[condicion]    
                 dic["predominante"]["condicion"]= condicion
-    lista= ar.insertion_sort(lista, sort_crt)
+    
     return lista
-def sort_crt(elemento1, elemento2):
-    if elemento2["numero"]<elemento1["numero"]:
-        return True           
-    elif elemento1["numero"]==elemento2["numero"]:
-        if elemento2["promedio"]<elemento1["promedio"]:
-            return True
-    else:
-        return False
-                 
 
 def req_6(catalog, p_start, p_end, umbral, condados:list ):
     """
@@ -481,9 +473,8 @@ def req_7(catalog, lat_start, lon_start, lat_end, lon_end):
     """
     Retorna el resultado del requerimiento 7
     """
+    inicio = get_time()
     tree = catalog["treq7"]
-    
-    print(tree)
     
     id_set = bst.key_set(tree)
     
@@ -511,39 +502,22 @@ def req_7(catalog, lat_start, lon_start, lat_end, lon_end):
     else:
         for accident in result["elements"]:
             ar.add_last(retorno, accident)
-            
+    final = get_time()
+    print(delta_time(inicio,final))     
     return retorno
     
 
 
-def req_8(my_bst):
+def req_8(catalog):
     """
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
-    elemdiametro= recursiva_diametro(my_bst["root"])
-    return elemdiametro[2]
-def recursiva_diametro(root):
-    if root is None:
-        return 0,0,[],[]
-    izquierda= recursiva_diametro(root["left"])
-    derecha= recursiva_diametro(root["right"])
+    pass
 
-    alturaactual= bst.height_tree(root)
-    if izquierda[0] > derecha[0]:
-        caminolargo= [root["key"]] + izquierda[3]
-    else:
-        caminolargo= [root["key"]] + derecha[3]
-        
-    diametronodo= float(izquierda[0]) + float(derecha[0])
-    caminonodo= izquierda[3][::-1] + [root["key"]] + derecha[3]
-    if (izquierda[1])> diametronodo:
-        diametronodo= izquierda[1]
-        caminonodo= izquierda[3]
-    if (derecha[1])> diametronodo:
-        diametronodo= derecha[1]
-        caminonodo= derecha[3] 
-    return alturaactual, diametronodo, caminonodo, caminolargo
+
+# Funciones para medir tiempos de ejecucion
+
 def get_time():
     """
     devuelve el instante tiempo de procesamiento en milisegundos
