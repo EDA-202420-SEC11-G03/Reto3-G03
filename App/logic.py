@@ -292,35 +292,40 @@ def req_2(catalog, visibility_range, states):
     return result
 
 
-def req_3(catalog, n:int):
+def req_3(catalog, n: int):
     """
     Retorna el resultado del requerimiento 3
     """
-    tiempo_inicial = get_time()
-    n_cumplen = 0 #contador de cuantos accidentes ya han sido añadidos
+    inicio = get_time()
+    n_cumplen = 0  # contador de cuantos accidentes ya han sido añadidos
     lista_accidentes = ar.new_list()
-    
-    rango = int(n) 
-    
-    def filtro_intervalo(nodo): #función auxiliar recursiva para cada nodo/sub-arbol
-        nonlocal n_cumplen, lista_accidentes
-        i = 0 
+    sum_v = 0  # visibilidad de cada accidente
+    rango = int(n)
+
+    def filtro_intervalo(nodo):  # función auxiliar recursiva para cada nodo/sub-arbol
+        nonlocal n_cumplen, lista_accidentes, sum_v
+        i = 0
         if nodo is None:
-            return      
+            return
         accidentes = nodo["value"]
-        while i < len(accidentes) and n_cumplen < rango:           
-            ar.add_last(lista_accidentes,accidentes)
+        while i < len(accidentes) and n_cumplen < rango:
+            ar.add_last(lista_accidentes, accidentes)
+            sum_v += accidentes[i]["Visibility(mi)"]  # suma la visibilidad de cada accidente
             i += 1
-            n_cumplen += 1   
-        
-        filtro_intervalo(nodo["left"])      
-        filtro_intervalo(nodo["right"]) 
-        
+            n_cumplen += 1
+
+        filtro_intervalo(nodo["left"])
+        filtro_intervalo(nodo["right"])
+
     filtro_intervalo(catalog["treq3"]["root"])
-    tiempo_final = get_time()
-    tiempo_ejecucion = delta_time(tiempo_inicial,tiempo_final)
-    print(tiempo_ejecucion)
-    return n_cumplen, lista_accidentes
+    if n_cumplen == 0:
+        n_cumplen = 1
+        
+    average = sum_v / n_cumplen 
+    
+    final = get_time()
+    tiempo = delta_time(inicio, final)
+    return average, lista_accidentes, tiempo
     
 
 
